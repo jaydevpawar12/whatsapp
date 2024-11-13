@@ -1,31 +1,27 @@
 const multer = require("multer")
-const { v4: uuid } = require("uuid")
+// const { v4: uuid } = require("uuid")
 const path = require("path")
-const fs = require("fs")
+// const fs = require("fs")
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
-        cb(null, uuid() + path.extname(file.originalname))
+        const fn = Date.now() + path.extname(file.originalname)
+        cb(null, fn)
     },
-    destination: (req, file, cb) => {
-        const url = "uploads"
-        if (!fs.existsSync(url)) {
-            fs.mkdirSync(url)
-        }
-        cb(null, url)
-    },
+
 })
 const profileStorage = multer.diskStorage({
     filename: (req, file, cb) => {
-        cb(null, uuid() + path.extname(file.originalname))
+        const fn = Date.now() + path.extname(file.originalname)
+        cb(null, fn)
     },
-    destination: (req, file, cb) => {
-        const url = "profile"
-        if (!fs.existsSync(url)) {
-            fs.mkdirSync(url)
-        }
-        cb(null, url)
-    },
+    // destination: (req, file, cb) => {
+    //     const url = "profile"
+    //     if (!fs.existsSync(url)) {
+    //         fs.mkdirSync(url)
+    //     }
+    //     cb(null, url)
+    // },
 })
 
 const upload = multer({ storage }).fields([
