@@ -30,20 +30,15 @@ exports.updateProfile = asyncHandler(async (req, res) => {
             const user = await User.findById(userId);
 
             if (req.file) {
-                const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-                    folder: "profile_pictures",
-                    public_id: `${userId}_profile`,
-                    overwrite: true,
-                });
+                const uploadResult = await cloudinary.uploader.upload(req.file.path);
 
                 if (user.photo && user.photo !== "dummy.png" && user.photo.startsWith("http")) {
                     const publicId = user.photo.split('/').pop().split('.')[0];
-                    await cloudinary.uploader.destroy(`profile_pictures/${publicId}`);
+                    await cloudinary.uploader.destroy(publicId);
                 }
 
                 user.photo = uploadResult.secure_url;
             }
-
 
             user.name = name || user.name;
             user.email = email || user.email;
@@ -58,13 +53,18 @@ exports.updateProfile = asyncHandler(async (req, res) => {
 });
 
 exports.searchProfile = asyncHandler(async (req, res) => {
+
     const { term } = req.params;
+
     const result = await User.find({
+        
         $or: [
             { name: { $regex: term, $options: "i" } },
             { email: { $regex: term, $options: "i" } },
             { mobile: { $regex: term, $options: "i" } },
         ],
+
     });
+
     res.json({ message: "Search success", result });
 });

@@ -12,7 +12,8 @@ mongoose.connect(process.env.MONGO_URL)
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: "https://whatsapp-ntl0.onrender.com",
+    // origin: "https://whatsapp-ntl0.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true
 }))
 
